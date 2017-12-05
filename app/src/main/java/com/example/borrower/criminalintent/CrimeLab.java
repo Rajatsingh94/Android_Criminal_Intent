@@ -16,7 +16,7 @@ public class CrimeLab {
     private List<Crime> mcrime;
 
 
-    public static CrimeLab ge(Context context)
+    public static CrimeLab get(Context context)
     {
         if(mcrimelab==null)
         {
