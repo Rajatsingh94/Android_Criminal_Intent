@@ -1,5 +1,6 @@
 package com.example.borrower.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,7 +22,7 @@ public class CrimeListFragment extends Fragment {
 
   private RecyclerView mrecycleview;
 
-  private class CrimeHolder extends RecyclerView.ViewHolder
+  private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener
   {
       public TextView mtextview;
       public CheckBox msolvedcheckbox;
@@ -29,6 +30,7 @@ public class CrimeListFragment extends Fragment {
 
       public CrimeHolder(View itemView) {
           super(itemView);
+          itemView.setOnClickListener(this);
           mtextview = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
           mdateview = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
           msolvedcheckbox = (CheckBox) itemView.findViewById(R.id.list_item_checkbox_solved);
@@ -45,6 +47,13 @@ public class CrimeListFragment extends Fragment {
 
 
 
+
+      }
+
+      @Override
+      public void onClick(View view) {
+            Intent intent = CrimeActivity.newIntent(getActivity(),mcrimebind.getId());
+            startActivity(intent);
 
       }
   }
@@ -97,6 +106,11 @@ public class CrimeListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateui();
+    }
 
     private CrimeAdapter mcrimeadapter;
 
@@ -106,8 +120,14 @@ public class CrimeListFragment extends Fragment {
 
         List<Crime> crime = crimeLab.getCrime();
 
-        mcrimeadapter = new CrimeAdapter(crime);
-        mrecycleview.setAdapter(mcrimeadapter);
+        if(mcrimeadapter==null) {
+            mcrimeadapter = new CrimeAdapter(crime);
+            mrecycleview.setAdapter(mcrimeadapter);
+        }
+        else
+        {
+            mcrimeadapter.notifyDataSetChanged();
+        }
     }
 
 

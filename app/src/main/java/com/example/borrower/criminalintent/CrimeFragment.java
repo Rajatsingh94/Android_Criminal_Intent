@@ -8,12 +8,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.zip.Inflater;
 
 /**
@@ -22,15 +25,28 @@ import java.util.zip.Inflater;
 
 public class CrimeFragment extends Fragment {
 
+    private static final String ARGS_CRIME_ID = "crime_id";
+
     private Crime mcrime;
     EditText mtexttitle;
     Button mdatebutton;
     CheckBox mcrimesolvedcheckbox;
 
+    public static CrimeFragment newInstance (UUID crimeid)
+    {
+        Bundle args = new Bundle();
+        args.putSerializable(ARGS_CRIME_ID,crimeid);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mcrime = new Crime();
+        UUID crimeid = (UUID) getArguments().getSerializable(ARGS_CRIME_ID);
+        mcrime = CrimeLab.get(getActivity()).getCrime(crimeid);
     }
 
     @Nullable
@@ -76,8 +92,6 @@ public class CrimeFragment extends Fragment {
 
         return view;
     }
-
-
 
 
 }
